@@ -1,3 +1,13 @@
 
 Some java GUI app..
 
+
+TODO:
+-------
+	
+	* Fix a glitch that after startup the list of periods is not updated 
+	* Add periods at the launch time until the latest is after today
+	* Add table editors, so start and end dates of a Period could be changed
+	* Add show all check box
+	* Color line text accordingly: gray - past, red - current, black - future
+	 
