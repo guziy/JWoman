@@ -1,5 +1,7 @@
 package main.db;
 
+
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -83,22 +85,27 @@ public class DataBase {
 		ResultSet rs;
 		List<Period> results = new ArrayList<Period>();
 		
-		String query = "select * from (select * from periods order by start_date ASC limit " + nPeriods + 
+		String query = "select rowid,* from (select * from periods order by start_date ASC limit " + nPeriods + 
 				") order by start_date DESC;";
 		
 		rs = stmt.executeQuery(query);
 		
 		DateTime start, end;
+		int row;
+		Period p;
 		while (rs.next()){
+			row = rs.getRow();
 			start = new DateTime(rs.getDate("start_date").getTime());
 			end = new DateTime(rs.getDate("end_date").getTime());
-			results.add(new Period(start, end, rs.getInt(RECCURENCE_DAYS_COLNAME)));
+			
+			p = new Period(start, end, rs.getInt(RECCURENCE_DAYS_COLNAME));
+			p.setDbRow(row);
+			results.add(p);
 		}
 		rs.close();
-		stmt.close();
-		
+		stmt.close();		
 		return results;	
-	}
+	}	
 	
 	
 	/**
@@ -106,7 +113,7 @@ public class DataBase {
 	 * @param p
 	 * @throws SQLException
 	 */
-	public void savePeriod(Period p) throws SQLException{
+	public void saveNewPeriod(Period p) throws SQLException{
 		PreparedStatement pstmt = connection.prepareStatement(
 				"insert into "+ PEROIDS_TABLE_NAME +"(start_date, end_date, " + RECCURENCE_DAYS_COLNAME + ")" +
 				"values(?,?,?)");
@@ -118,6 +125,38 @@ public class DataBase {
 		
 		System.out.println("Saving " + p);
 		pstmt.executeUpdate();
+	}
+
+	/**
+	 * If new periods were added update them
+	 * @param currentPeriodsList
+	 * @throws SQLException
+	 */
+	public void updatePeriodsInDb(List<Period> currentPeriodsList) throws SQLException {
+		if (currentPeriodsList == null) return;
+		
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("update ");
+		stringBuilder.append(PEROIDS_TABLE_NAME);
+		stringBuilder.append(" set start_date=?, end_date=?, ");
+		stringBuilder.append(RECCURENCE_DAYS_COLNAME + "=?");
+		stringBuilder.append(" where rowid=?;");
+		
+		PreparedStatement pstmt = connection.prepareStatement(
+				stringBuilder.toString());
+		
+		for (Period p: currentPeriodsList){
+			if (p.getDbRow() == -1){
+				saveNewPeriod(p);
+			} else {
+				pstmt.setDate(1, new java.sql.Date(p.getStartDate().toDate().getTime()));
+				pstmt.setDate(2, new java.sql.Date(p.getEndDate().toDate().getTime()));
+				pstmt.setInt(3, p.getReccurrenceDays());
+				pstmt.setInt(4, p.getDbRow());
+				pstmt.executeUpdate();
+			}
+		}
+		pstmt.close();
 	}
 	
 	

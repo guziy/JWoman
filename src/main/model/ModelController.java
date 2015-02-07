@@ -30,19 +30,46 @@ public class ModelController {
 	
 	
 	/**
+	 * Save all the periods to db (update if needed)
+	 * @throws SQLException 
+	 */
+	public void save() throws SQLException {
+		//TODO: ...
+		db.updatePeriodsInDb(currentPeriodsList);
+	}
+	
+
+	
+	private void addNewPeriodIfNeeded(List<Period> periods){
+		//Add a new period if necessary
+		DateTime currentDate = new DateTime();
+		if (periods.size() == 0){
+			periods.add(new Period(currentDate));
+		} else{
+			Period previous = periods.get(0);
+			if (previous.getStartDate().isBefore(currentDate)){
+				periods.add(0, previous.createNextPeriod());
+			}
+		}		
+	}
+	
+	/**
 	 * Get nPeriods of the latest periods sorted to have the latest period first
 	 * @param nPeriods
 	 * @return
 	 * @throws SQLException
 	 */
 	public List<Period> getNLastPeriods(int nPeriods) throws SQLException{
+		
 		if (nPeriods <= currentPeriodsList.size()){
+			addNewPeriodIfNeeded(currentPeriodsList);
 			return currentPeriodsList.subList(0, nPeriods);		
 		} 
 		
 		currentPeriodsList = db.getNLastPeriods(nPeriods);
+		addNewPeriodIfNeeded(currentPeriodsList);
+		
 		return currentPeriodsList;
-				
 	}
 	
 	
@@ -52,7 +79,7 @@ public class ModelController {
 		Period p0 = new Period(start, start.plusDays(5), reccurrence);
 		Period p = p0;
 		for (int i = 0; i < 100; i++){
-			db.savePeriod(p);
+			db.saveNewPeriod(p);
 			p = p.createNextPeriod();
 		}
 	}

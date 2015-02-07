@@ -7,7 +7,25 @@ public class Period {
 	
 	private DateTime startDate, endDate;
 	private int reccurrenceDays = 30;
+	private static final int defaultPeriodDurationDays = 5;
 	
+	private int dbRow = -1;
+	
+	public int getDbRow() {
+		return dbRow;
+	}
+
+	public void setDbRow(int dbRow) {
+		this.dbRow = dbRow;
+	}
+	
+	
+	public Period(DateTime startDate){
+		this.setStartDate(startDate);
+		this.setEndDate(startDate.plusDays(defaultPeriodDurationDays));
+	}
+	
+
 	public Period(DateTime startDate, int durationDays, int reccurrenceDays) {
 		this.setStartDate(startDate);
 		this.setEndDate(startDate.plusDays(durationDays));
