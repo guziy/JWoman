@@ -47,9 +47,10 @@ public class ModelController {
 			periods.add(new Period(currentDate));
 		} else{
 			Period previous = periods.get(0);
-			if (previous.getStartDate().isBefore(currentDate)){
-				periods.add(0, previous.createNextPeriod());
+			while (previous.getStartDate().isBefore(currentDate)){
+				previous = previous.createNextPeriod();
 			}
+			periods.add(previous);
 		}		
 	}
 	

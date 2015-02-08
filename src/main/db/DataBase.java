@@ -85,8 +85,8 @@ public class DataBase {
 		ResultSet rs;
 		List<Period> results = new ArrayList<Period>();
 		
-		String query = "select rowid,* from (select * from periods order by start_date ASC limit " + nPeriods + 
-				") order by start_date DESC;";
+		String query = "select rowid,* from periods order by start_date DESC limit " + nPeriods + 
+				";";
 		
 		rs = stmt.executeQuery(query);
 		
@@ -99,6 +99,7 @@ public class DataBase {
 			end = new DateTime(rs.getDate("end_date").getTime());
 			
 			p = new Period(start, end, rs.getInt(RECCURENCE_DAYS_COLNAME));
+			System.out.println("Got " + p + " from a DB.");
 			p.setDbRow(row);
 			results.add(p);
 		}

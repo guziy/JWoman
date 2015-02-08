@@ -19,6 +19,8 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 		Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
 				row, column);
 		
+		if (value == null) return c;
+		
 		if (value.getClass() == DateTime.class){
 			DateTimeFormatter fmt = DateTimeFormat.forPattern("E, d-MMMM-yyyy");
 			
