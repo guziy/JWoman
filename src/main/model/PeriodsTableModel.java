@@ -1,30 +1,43 @@
 package main.model;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
-public class PeriodsTableModel extends AbstractTableModel {
+public class PeriodsTableModel extends AbstractTableModel implements DocumentListener, ActionListener{
 
 	List<Period> periods = new ArrayList<Period>();
 	private String[] columnNames = new String[]{
 			"Start date", "End date", "Status"
 	};
 	
+	ModelController mc;
+	int nPeriodsToShow;
+	
 	@Override
 	public String getColumnName(int column) {
 		return columnNames[column];
 	}
 
-	private DateTime currentDate;
+	private LocalDate currentDate;
 	
 	
-	public PeriodsTableModel(List<Period> periods) {
-		currentDate = new DateTime();
-		this.periods = periods;
+	public PeriodsTableModel(ModelController mc, int nPeriodsToShow) throws SQLException {		
+		this.mc = mc;
+		this.periods = mc.getNLastPeriods(nPeriodsToShow);
+		this.nPeriodsToShow = nPeriodsToShow;
 	}
 	
 	@Override
@@ -40,6 +53,7 @@ public class PeriodsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
+		currentDate = new LocalDate();
 		
 		Period p = periods.get(rowIndex);
 		
@@ -56,11 +70,76 @@ public class PeriodsTableModel extends AbstractTableModel {
 					return "red";
 				} else if (p.getEndDate().isBefore(currentDate)){
 					return "yellow";
-				} else if (p.getStartDate().isBefore(currentDate)){
+				} else if (p.getStartDate().isAfter(currentDate)){
 					return "green";
 				}
+				
+				if (p.getStartDate().equals(currentDate) || p.getEndDate().equals(currentDate)){
+					return "red";
+				}
+				
 		}		
 		return null;
+	}
+
+	@Override
+	public void insertUpdate(DocumentEvent e) {
+		changedUpdate(e);
+	}
+
+	@Override
+	public void removeUpdate(DocumentEvent e) {
+		changedUpdate(e);
+		
+	}
+	
+	
+	private void onChangeOfNumsOfPeriodsToShow(Document d) throws SQLException{
+		try {
+			
+			String text = d.getText(0, d.getLength());
+			text = text.trim();
+			if (text.isEmpty()){
+				return;
+			}
+			
+			int nPeriods = Integer.parseInt(text);			
+			
+			if (nPeriods != this.nPeriodsToShow){
+				this.nPeriodsToShow = nPeriods;
+				this.periods = mc.getNLastPeriods(nPeriods);
+				this.fireTableDataChanged();
+			}
+			
+		} catch (BadLocationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (NumberFormatException nfex){
+			
+		}
+	}
+
+	@Override
+	public void changedUpdate(DocumentEvent e) {
+		try {
+			onChangeOfNumsOfPeriodsToShow(e.getDocument());
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() instanceof JTextField){
+			try {
+				onChangeOfNumsOfPeriodsToShow(((JTextField) e.getSource()).getDocument());
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	

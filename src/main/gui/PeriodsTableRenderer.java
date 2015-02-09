@@ -7,6 +7,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.ReadableInstant;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -21,11 +23,11 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 		
 		if (value == null) return c;
 		
-		if (value.getClass() == DateTime.class){
+		if (value.getClass() == LocalDate.class){
 			DateTimeFormatter fmt = DateTimeFormat.forPattern("E, d-MMMM-yyyy");
 			
 			JLabel jl = (JLabel) c;
-			jl.setText(fmt.print((DateTime) value));
+			jl.setText(fmt.print( (LocalDate) value));
 			
 		}
 		

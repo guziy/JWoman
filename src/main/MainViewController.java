@@ -18,8 +18,7 @@ public class MainViewController {
 
 	public MainViewController() throws SQLException {
 		modelController = new ModelController();
-		ptm = new PeriodsTableModel(getNLastPeriods(Configuration
-				.getConfiguration().getDefaultNumberOfPeriodsToShow()));
+		ptm = new PeriodsTableModel(modelController, Configuration.getConfiguration().getDefaultNumberOfPeriodsToShow());
 	}
 
 	public TableModel getPeriodsTableModel() {

@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import main.model.Period;
 
@@ -90,16 +91,16 @@ public class DataBase {
 		
 		rs = stmt.executeQuery(query);
 		
-		DateTime start, end;
+		LocalDate start, end;
 		int row;
 		Period p;
 		while (rs.next()){
 			row = rs.getRow();
-			start = new DateTime(rs.getDate("start_date").getTime());
-			end = new DateTime(rs.getDate("end_date").getTime());
+			start = new LocalDate(rs.getDate("start_date").getTime());
+			end = new LocalDate(rs.getDate("end_date").getTime());
 			
 			p = new Period(start, end, rs.getInt(RECCURENCE_DAYS_COLNAME));
-			System.out.println("Got " + p + " from a DB.");
+			//System.out.println("Got " + p + " from a DB.");
 			p.setDbRow(row);
 			results.add(p);
 		}

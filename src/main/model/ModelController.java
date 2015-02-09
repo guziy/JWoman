@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import main.Configuration;
 import main.db.DataBase;
@@ -38,19 +39,24 @@ public class ModelController {
 		db.updatePeriodsInDb(currentPeriodsList);
 	}
 	
-
 	
 	private void addNewPeriodIfNeeded(List<Period> periods){
 		//Add a new period if necessary
-		DateTime currentDate = new DateTime();
+		LocalDate currentDate = new LocalDate();
+		Period previous, next;
 		if (periods.size() == 0){
-			periods.add(new Period(currentDate));
-		} else{
-			Period previous = periods.get(0);
-			while (previous.getStartDate().isBefore(currentDate)){
-				previous = previous.createNextPeriod();
-			}
+			previous = new Period(currentDate);
 			periods.add(previous);
+			periods.add(0, previous.createNextPeriod());
+		} else{
+			previous = periods.get(0);
+			next = previous;
+			while (next.getStartDate().isBefore(currentDate) || next.getStartDate().isEqual(currentDate)){
+				next = next.createNextPeriod();
+			}
+			if (next != previous) {
+				periods.add(0, next);
+			}
 		}		
 	}
 	
@@ -68,15 +74,14 @@ public class ModelController {
 		} 
 		
 		currentPeriodsList = db.getNLastPeriods(nPeriods);
-		addNewPeriodIfNeeded(currentPeriodsList);
-		
+		addNewPeriodIfNeeded(currentPeriodsList);		
 		return currentPeriodsList;
 	}
 	
 	
 	public void createTestData() throws SQLException{
 		int reccurrence = 30; //days
-		DateTime start = new DateTime(1980, 1, 1, 0, 0);
+		LocalDate start = new LocalDate(1980, 1, 1);
 		Period p0 = new Period(start, start.plusDays(5), reccurrence);
 		Period p = p0;
 		for (int i = 0; i < 100; i++){
