@@ -13,6 +13,7 @@ public class PosIntInputVerifier  extends InputVerifier{
 			Object v = ((JFormattedTextField)input).getValue();
 			
 			if (v == null) {
+				((JFormattedTextField)input).setValue(0);
 				return false;
 			}
 			
