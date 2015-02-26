@@ -13,6 +13,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
+import main.Configuration;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -67,15 +69,15 @@ public class PeriodsTableModel extends AbstractTableModel implements DocumentLis
 				
 			case 2:
 				if (p.getStartDate().isBefore(currentDate) && p.getEndDate().isAfter(currentDate)){
-					return "red";
+					return Configuration.CURRENT;
 				} else if (p.getEndDate().isBefore(currentDate)){
-					return "yellow";
+					return Configuration.PAST;
 				} else if (p.getStartDate().isAfter(currentDate)){
-					return "green";
+					return Configuration.UPCOMING;
 				}
 				
 				if (p.getStartDate().equals(currentDate) || p.getEndDate().equals(currentDate)){
-					return "red";
+					return Configuration.CURRENT;
 				}
 				
 		}		

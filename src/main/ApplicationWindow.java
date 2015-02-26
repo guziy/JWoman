@@ -114,7 +114,7 @@ public class ApplicationWindow {
 		NumberFormat fmt = NumberFormat.getIntegerInstance();
 		JTextField numPeriodsField = new JFormattedTextField(fmt);
 		numPeriodsField.setColumns(8);
-		numPeriodsField.setInputVerifier(new PosIntInputVerifier());
+		//numPeriodsField.setInputVerifier(new PosIntInputVerifier());
 		
 		//((PlainDocument) numPeriodsField.getDocument()).setDocumentFilter(new PositiveIntDocumentFilter());
 		numPeriodsField.getDocument().addDocumentListener((DocumentListener) ptm);

@@ -6,11 +6,13 @@ TODO:
 -------
 	
 	* Insure that there is no duplicates in the db and in the table
-	* Add periods at the launch time until the latest is after today
 	* Add table editors, so start and end dates of a Period could be changed
 	* Add show all check box
 	* Add menubar
+	* Add an icon in tray which will be customized based on the current date if it is within the period or not
 	* Color line text accordingly: gray - past, red - current, black - future
+	* If this is the first launch of the application: show a dialog asking for the latest period.
+	
 	
 	
 	 

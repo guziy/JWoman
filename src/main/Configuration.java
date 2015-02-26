@@ -18,6 +18,16 @@ public class Configuration {
 	
 	private static final int defaultNumPeriodsToShow = 30;
 	
+	
+	//Period labels:
+	public static final String UPCOMING = "Upcoming";
+	public static final String PAST = "Past";
+	public static final String CURRENT = "Current";
+	
+	
+	
+	
+	
 	private Configuration(){
 		this.userDir = System.getProperty("user.home");
 		

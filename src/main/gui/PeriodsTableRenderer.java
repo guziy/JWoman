@@ -23,6 +23,8 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 		
 		if (value == null) return c;
 		
+		
+		
 		if (value.getClass() == LocalDate.class){
 			DateTimeFormatter fmt = DateTimeFormat.forPattern("E, d-MMMM-yyyy");
 			
