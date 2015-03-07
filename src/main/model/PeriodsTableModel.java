@@ -18,7 +18,7 @@ import main.Configuration;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
-public class PeriodsTableModel extends AbstractTableModel implements DocumentListener, ActionListener{
+public class PeriodsTableModel extends AbstractTableModel implements ActionListener{
 
 	List<Period> periods = new ArrayList<Period>();
 	private String[] columnNames = new String[]{
@@ -26,7 +26,6 @@ public class PeriodsTableModel extends AbstractTableModel implements DocumentLis
 	};
 	
 	ModelController mc;
-	int nPeriodsToShow;
 	
 	@Override
 	public String getColumnName(int column) {
@@ -39,7 +38,6 @@ public class PeriodsTableModel extends AbstractTableModel implements DocumentLis
 	public PeriodsTableModel(ModelController mc, int nPeriodsToShow) throws SQLException {		
 		this.mc = mc;
 		this.periods = mc.getNLastPeriods(nPeriodsToShow);
-		this.nPeriodsToShow = nPeriodsToShow;
 	}
 	
 	@Override
@@ -84,59 +82,50 @@ public class PeriodsTableModel extends AbstractTableModel implements DocumentLis
 		return null;
 	}
 
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		changedUpdate(e);
-	}
-
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		changedUpdate(e);
+	
+	/**
+	 * Does not do anything if the newNumOfPeriods is equal to the current one
+	 * @param newNumOfPeriods
+	 * @throws SQLException
+	 */
+	public void onChangeOfNumOfPeriodsToShow(int newNumOfPeriods) throws SQLException{
+		if (newNumOfPeriods != this.periods.size() && newNumOfPeriods >= 0){
+			this.periods = mc.getNLastPeriods(newNumOfPeriods);
+			this.fireTableDataChanged();
+		}		
 		
 	}
 	
-	
-	private void onChangeOfNumsOfPeriodsToShow(Document d) throws SQLException{
-		try {
-			
-			String text = d.getText(0, d.getLength());
+	private void onChangeOfNumsOfPeriodsToShow(JTextField textField) throws SQLException{
+			String text = textField.getText();
 			text = text.trim();
 			if (text.isEmpty()){
 				return;
 			}
 			
-			int nPeriods = Integer.parseInt(text);			
-			
-			if (nPeriods != this.nPeriodsToShow){
-				this.nPeriodsToShow = nPeriods;
-				this.periods = mc.getNLastPeriods(nPeriods);
-				this.fireTableDataChanged();
+			int nPeriods = 0;
+			try{
+				nPeriods = Integer.parseInt(text);			
+			} catch (NumberFormatException nfe){
+				nPeriods = this.periods.size();
 			}
+				
+				
+			onChangeOfNumOfPeriodsToShow(nPeriods);
 			
-		} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (NumberFormatException nfex){
-			
-		}
+			if (nPeriods < 0) {
+				textField.setText(Integer.toString(this.periods.size()));
+			}
+		
 	}
 
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		try {
-			onChangeOfNumsOfPeriodsToShow(e.getDocument());
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() instanceof JTextField){
 			try {
-				onChangeOfNumsOfPeriodsToShow(((JTextField) e.getSource()).getDocument());
+				onChangeOfNumsOfPeriodsToShow((JTextField) e.getSource());
 			} catch (SQLException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

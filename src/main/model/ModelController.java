@@ -40,6 +40,11 @@ public class ModelController {
 	}
 	
 	
+	public int getTotalNumberOfPeriods() throws SQLException{
+		return db.getTotalNumberOfPeriods();
+	}
+	
+	
 	private void addNewPeriodIfNeeded(List<Period> periods){
 		//Add a new period if necessary
 		LocalDate currentDate = new LocalDate();

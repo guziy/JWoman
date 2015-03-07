@@ -6,6 +6,13 @@ import javax.swing.JFormattedTextField;
 
 public class PosIntInputVerifier  extends InputVerifier{
 
+	
+	private int lastGood;
+	
+	public PosIntInputVerifier(int initialValue) {
+		lastGood = initialValue;
+	}
+	
 	@Override
 	public boolean verify(JComponent input) {
 		// TODO Auto-generated method stub
@@ -13,18 +20,15 @@ public class PosIntInputVerifier  extends InputVerifier{
 			Object v = ((JFormattedTextField)input).getValue();
 			
 			if (v == null) {
-				((JFormattedTextField)input).setValue(0);
 				return false;
 			}
 			
-			int num = Integer.parseInt(v.toString());
-			
-			return num > 0;
-			
+			int num = Integer.parseInt(v.toString().trim());			
+			return num >= 0;
+		
 		} catch (NumberFormatException nfex){
-			
+			return false;
 		}
-		return false;
 	}
 
 }

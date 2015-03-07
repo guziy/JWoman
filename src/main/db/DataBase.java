@@ -66,6 +66,10 @@ public class DataBase {
 	}
 	
 	
+	
+	
+	
+	
 	/**
 	 * Execute when the application exits
 	 * @throws SQLException
@@ -73,6 +77,19 @@ public class DataBase {
 	public void close() throws SQLException{
 		connection.close();
 	}
+	
+	
+	public int getTotalNumberOfPeriods() throws SQLException{
+		
+		String query = "select count(*) as rowcount from " + PEROIDS_TABLE_NAME;
+		Statement stmt = connection.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		rs.next();
+		return rs.getInt("rowcount");
+		
+		
+	}
+	
 	
 	/**
 	 * Get nPeriods of last periods sorted in descending order (i.e latest first)
@@ -86,7 +103,9 @@ public class DataBase {
 		ResultSet rs;
 		List<Period> results = new ArrayList<Period>();
 		
-		String query = "select rowid,* from periods order by start_date DESC limit " + nPeriods + 
+		String query = "select rowid,* from "
+				+ PEROIDS_TABLE_NAME
+				+ " order by start_date DESC limit " + nPeriods + 
 				";";
 		
 		rs = stmt.executeQuery(query);

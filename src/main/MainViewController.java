@@ -3,6 +3,8 @@ package main;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
@@ -21,13 +23,18 @@ public class MainViewController {
 		ptm = new PeriodsTableModel(modelController, Configuration.getConfiguration().getDefaultNumberOfPeriodsToShow());
 	}
 
-	public TableModel getPeriodsTableModel() {
+	public PeriodsTableModel getPeriodsTableModel() {
 		return ptm;
 	}
 
 	private List<Period> getNLastPeriods(int nPeriods) throws SQLException {
 		return modelController.getNLastPeriods(nPeriods);
 	}
+	
+	public int getTotalNumberOfPeriods() throws SQLException{
+		return modelController.getTotalNumberOfPeriods();
+	}
+	
 
 	/**
 	 * Closes db connection, called when application is closing
@@ -40,9 +47,11 @@ public class MainViewController {
 	}
 
 	public void onExitApp(JFrame frame) {
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("/icons/heart-64px.png"));
 		if (JOptionPane.showConfirmDialog(frame,
 				"Are you sure to close this window?", "Really Closing?",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+				icon) == JOptionPane.YES_OPTION) {
 
 			try {
 				modelController.save();

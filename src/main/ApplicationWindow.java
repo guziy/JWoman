@@ -5,13 +5,17 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
@@ -40,6 +44,8 @@ public class ApplicationWindow {
 	
 	private MainViewController mvc;
 	
+	//TODO: improve the caching later
+	private int totalNumOfPeriodsCached = -1;
 	
 	public ApplicationWindow() throws SQLException {
 		mvc = new MainViewController();
@@ -47,11 +53,23 @@ public class ApplicationWindow {
 		
 	}
 	
+	/**
+	 * 
+	 * @return Customized main frame
+	 */
+	private JFrame getMainFrame(){
+		JFrame frame = new JFrame("JWoman");
+		frame.setSize(new Dimension(800, 600));
+		Toolkit kit = Toolkit.getDefaultToolkit();
+		Image image = kit.getImage(ClassLoader.getSystemResource("icons/heart-64px.png"));
+		frame.setIconImage(image);
+		return frame;
+	}
+	
+	
 	private void buildUI(){
 		//1. Create the frame.
-		JFrame frame = new JFrame("JWoman");
-		frame.setSize(800, 600);
-		
+		JFrame frame = getMainFrame();
 		
 		Container mainPane = frame.getContentPane();
 		GridBagLayout gbl = new GridBagLayout();
@@ -81,7 +99,7 @@ public class ApplicationWindow {
 		//3. Create components and put them in the frame.
 		
 		//add the table containing the periods
-		TableModel ptm = mvc.getPeriodsTableModel();
+		PeriodsTableModel ptm = mvc.getPeriodsTableModel();
 		JTable table = new JTable(ptm);
 		table.setDefaultRenderer(Object.class, new PeriodsTableRenderer());
 		//table.setPreferredSize(new Dimension(600, 400));
@@ -99,41 +117,55 @@ public class ApplicationWindow {
 		gbc.gridy = 0;
 		gbc.gridheight = 2;
 		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 0.7;
+		gbc.weighty = 1;
+		gbc.insets = new Insets(10, 10, 10, 10);
 		mainPane.add(new JScrollPane(table), gbc);
+		
 		
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridheight = 1;
-		gbc.insets = new Insets(10,10,0,10);
-		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.insets = new Insets(10,10,10,10);
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.weightx = 0.3;
+		
 		mainPane.add(filterPanel, gbc);
 
 		
 		
 		//Add the text field where the number of last periods to show is specified
-		NumberFormat fmt = NumberFormat.getIntegerInstance();
-		JTextField numPeriodsField = new JFormattedTextField(fmt);
+		JTextField numPeriodsField = new JTextField();
 		numPeriodsField.setColumns(8);
-		//numPeriodsField.setInputVerifier(new PosIntInputVerifier());
 		
 		//((PlainDocument) numPeriodsField.getDocument()).setDocumentFilter(new PositiveIntDocumentFilter());
-		numPeriodsField.getDocument().addDocumentListener((DocumentListener) ptm);
-		//numPeriodsField.addActionListener((ActionListener) ptm);
+		//numPeriodsField.getDocument().addDocumentListener((DocumentListener) ptm);
+		numPeriodsField.addActionListener((ActionListener) ptm);
 		numPeriodsField.setText(Integer.toString(ptm.getRowCount()));
 		
 		
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		gbc.gridheight = 1;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(10,10,0,10);
+		gbc.weighty = 0;
+		gbc.insets = new Insets(10,10,0,0);
+		gbc.fill = GridBagConstraints.VERTICAL;
+		gbc.anchor = GridBagConstraints.NORTHWEST;
 		filterPanel.add(numPeriodsField, gbc);
 		
 		//Add the label for numPeriodsField
 		JLabel numPeriodsLabel = new JLabel("Last periods to show: ");
 		gbc.gridx = 0;
 		gbc.insets = new Insets(10,10,0,0);
-		filterPanel.add(numPeriodsLabel, gbc);	
+		filterPanel.add(numPeriodsLabel, gbc);
+		
+		
+		JButton filterButton = new JButton(new ImageIcon(this.getClass().getResource("/icons/filter-24px.png")));
+		gbc.gridx = 2;
+		gbc.gridy = 0;
+		gbc.insets = new Insets(10,0,0,0);
+		filterPanel.add(filterButton, gbc);
+		
 		
 		JCheckBox showAllCheckBox = new JCheckBox("Show all periods");
 		showAllCheckBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -141,7 +173,31 @@ public class ApplicationWindow {
 		gbc.gridy = 1;
 		gbc.gridwidth = 2;
 		gbc.insets = new Insets(10,10,10,0);
-		filterPanel.add(showAllCheckBox, gbc);	
+		filterPanel.add(showAllCheckBox, gbc);
+		
+		//Show all checkbox actions
+		showAllCheckBox.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				numPeriodsField.setEnabled(!showAllCheckBox.isSelected());
+				filterButton.setEnabled(!showAllCheckBox.isSelected());
+				
+				if (showAllCheckBox.isSelected()){
+					try {
+
+						if (totalNumOfPeriodsCached < 0) { //Go to the database only once
+							totalNumOfPeriodsCached = mvc.getTotalNumberOfPeriods();
+						}
+						ptm.onChangeOfNumOfPeriodsToShow(totalNumOfPeriodsCached);
+						numPeriodsField.setText(Integer.toString(totalNumOfPeriodsCached));
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}				
+				}
+			}
+			
+		});
 		
 		
 		
