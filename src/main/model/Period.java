@@ -1,13 +1,13 @@
 package main.model;
 
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
-import org.joda.time.ReadableInstant;
 
 
 public class Period {
 	
 	private LocalDate startDate, endDate;
-	private int reccurrenceDays = 30;
+	private int recurrenceDays = 30;
 	private static final int defaultPeriodDurationDays = 5;
 	
 	private int dbRow = -1;
@@ -27,23 +27,23 @@ public class Period {
 	}
 	
 
-	public Period(LocalDate startDate, int durationDays, int reccurrenceDays) {
+	public Period(LocalDate startDate, int durationDays, int recurrenceDays) {
 		this.setStartDate(startDate);
 		this.setEndDate(startDate.plusDays(durationDays));
-		if (reccurrenceDays > 0) this.setReccurrenceDays(reccurrenceDays);
+		if (recurrenceDays > 0) this.setRecurrenceDays(recurrenceDays);
 	}
 	
 	public Period(LocalDate startDate, LocalDate endDate) {
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
-		this.setReccurrenceDays(30);
+		this.setRecurrenceDays(30);
 	}
 	
-	public Period(LocalDate startDate, LocalDate endDate, int reccurrenceDays) {
+	public Period(LocalDate startDate, LocalDate endDate, int recurrenceDays) {
 		this.setStartDate(startDate);
 		this.setEndDate(endDate);
-		if (reccurrenceDays > 0) {
-			this.setReccurrenceDays(reccurrenceDays);
+		if (recurrenceDays > 0) {
+			this.setRecurrenceDays(recurrenceDays);
 		}		
 	}
 	
@@ -52,20 +52,18 @@ public class Period {
 	}
 	
 	public Period createNextPeriod(){
-		LocalDate newStart = startDate.plusDays(reccurrenceDays);
-		LocalDate newEnd = endDate.plusDays(reccurrenceDays);
-		
-		Period p = new Period(newStart, newEnd, reccurrenceDays);
-		return p;
+		LocalDate newStart = startDate.plusDays(recurrenceDays);
+		LocalDate newEnd = endDate.plusDays(recurrenceDays);
+        return new Period(newStart, newEnd, recurrenceDays);
 	}
 
-	public int getReccurrenceDays() {
-		return reccurrenceDays;
+	public int getRecurrenceDays() {
+		return recurrenceDays;
 	}
 
 
-	public void setReccurrenceDays(int reccurrenceDays) {
-		this.reccurrenceDays = reccurrenceDays;
+	public void setRecurrenceDays(int recurrenceDays) {
+		this.recurrenceDays = recurrenceDays;
 	}
 
 
@@ -87,5 +85,30 @@ public class Period {
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
-	
+
+    /**
+     *
+     * @return true if the periods have passed
+     */
+    public boolean isPassed(){
+        return this.endDate.isBefore(new LocalDate());
+    }
+
+
+    public boolean isFuture(){
+        return this.startDate.isAfter(new LocalDate());
+    }
+
+    /**
+     *
+     * @return true if the periods are in progress
+     */
+    public boolean isActive(){
+        return !(isPassed() || isFuture());
+    }
+
+
+    public int getDurationDays() {
+        return Days.daysBetween(startDate, endDate).getDays();
+    }
 }

@@ -9,10 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import main.model.Period;
@@ -141,7 +139,7 @@ public class DataBase {
 		
 		pstmt.setDate(1, new java.sql.Date(p.getStartDate().toDate().getTime()));
 		pstmt.setDate(2, new java.sql.Date(p.getEndDate().toDate().getTime()));
-		pstmt.setInt(3, p.getReccurrenceDays());
+		pstmt.setInt(3, p.getRecurrenceDays());
 		
 		
 		System.out.println("Saving " + p);
@@ -172,7 +170,7 @@ public class DataBase {
 			} else {
 				pstmt.setDate(1, new java.sql.Date(p.getStartDate().toDate().getTime()));
 				pstmt.setDate(2, new java.sql.Date(p.getEndDate().toDate().getTime()));
-				pstmt.setInt(3, p.getReccurrenceDays());
+				pstmt.setInt(3, p.getRecurrenceDays());
 				pstmt.setInt(4, p.getDbRow());
 				pstmt.executeUpdate();
 			}

@@ -17,9 +17,10 @@ public class MainViewController {
 
 	private ModelController modelController;
 	private PeriodsTableModel ptm;
+    private JFrame mainFrame;
 
-	public MainViewController() throws SQLException {
-		modelController = new ModelController();
+    public MainViewController() throws SQLException {
+		modelController = new ModelController(this);
 		ptm = new PeriodsTableModel(modelController, Configuration.getConfiguration().getDefaultNumberOfPeriodsToShow());
 	}
 
@@ -66,4 +67,11 @@ public class MainViewController {
 
 	}
 
+    public void setMainFrame(JFrame mainFrame) {
+        this.mainFrame = mainFrame;
+    }
+
+    public JFrame getMainFrame(){
+        return this.mainFrame;
+    }
 }

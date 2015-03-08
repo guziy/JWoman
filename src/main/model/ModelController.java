@@ -4,11 +4,14 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import main.MainViewController;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import main.Configuration;
 import main.db.DataBase;
+
+import javax.swing.*;
 
 public class ModelController {
 	
@@ -17,12 +20,20 @@ public class ModelController {
 	
 	
 	private DataBase db;
-	private Configuration configuration = Configuration.getConfiguration();
-	
-	
-	public ModelController() throws SQLException {
-		db = configuration.getDb();
+    private MainViewController mvc;
+
+
+    public JFrame getMainWindow(){
+       return mvc.getMainFrame();
+    }
+
+
+	public ModelController(MainViewController mvc) throws SQLException {
+        this.mvc = mvc;
+        Configuration configuration = Configuration.getConfiguration();
+        db = configuration.getDb();
 		currentPeriodsList = db.getNLastPeriods(30);
+
 	}
 	
 	public List<Period> getPeriodsForDates(Date start, Date end){	
@@ -85,10 +96,9 @@ public class ModelController {
 	
 	
 	public void createTestData() throws SQLException{
-		int reccurrence = 30; //days
+		int recurrence = 30; //days
 		LocalDate start = new LocalDate(1980, 1, 1);
-		Period p0 = new Period(start, start.plusDays(5), reccurrence);
-		Period p = p0;
+        Period p = new Period(start, start.plusDays(5), recurrence);
 		for (int i = 0; i < 100; i++){
 			db.saveNewPeriod(p);
 			p = p.createNextPeriod();
