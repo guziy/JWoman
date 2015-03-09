@@ -63,11 +63,7 @@ public class ModelController implements TableModelListener {
 		//Add a new period if necessary
 		LocalDate currentDate = new LocalDate();
 		Period previous, next;
-		if (periods.size() == 0){
-			previous = new Period(currentDate);
-			periods.add(previous);
-			periods.add(0, previous.createNextPeriod());
-		} else{
+        if (periods.size() != 0) {
 			previous = periods.get(0);
 			next = previous;
 			while (next.getStartDate().isBefore(currentDate) || next.getStartDate().isEqual(currentDate)){
@@ -76,8 +72,8 @@ public class ModelController implements TableModelListener {
 			if (next != previous) {
 				periods.add(0, next);
 			}
-		}		
-	}
+		}
+    }
 	
 	/**
 	 * Get nPeriods of the latest periods sorted to have the latest period first
@@ -93,7 +89,7 @@ public class ModelController implements TableModelListener {
 		} 
 		
 		currentPeriodsList = db.getNLastPeriods(nPeriods);
-		//addNewPeriodIfNeeded(currentPeriodsList);
+		addNewPeriodIfNeeded(currentPeriodsList);
 		return currentPeriodsList;
 	}
 	

@@ -31,7 +31,8 @@ public class FirstTimeDialog extends JDialog {
         super(mainWindow);
         setModalityType(ModalityType.APPLICATION_MODAL);
 
-        //setSize(new Dimension(800, 600));
+        setSize(new Dimension(800, 300));
+
         buildUI();
         pack();
         startDate = new LocalDate();
@@ -75,6 +76,8 @@ public class FirstTimeDialog extends JDialog {
 
         okButton = new JButton("OK");
         cancelButton = new JButton("Cancel");
+        okButton.setSize(cancelButton.getSize());
+        okButton.setPreferredSize(cancelButton.getPreferredSize());
 
 
         gbc.gridx = 0;
@@ -111,12 +114,15 @@ public class FirstTimeDialog extends JDialog {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        //gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 0.5;
         buttonPanel.add(okButton, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
+        gbc.insets = new Insets(0, 10, 0, 0);
         buttonPanel.add(cancelButton, gbc);
 
 
