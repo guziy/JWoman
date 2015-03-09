@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -18,6 +19,7 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.PlainDocument;
 
+import com.apple.eawt.Application;
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import main.gui.FirstTimeDialog;
 import main.gui.PeriodsTableEditor;
@@ -59,6 +61,13 @@ public class ApplicationWindow {
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image image = kit.getImage(ClassLoader.getSystemResource("icons/heart-64px.png"));
         frame.setIconImage(image);
+
+
+        String os = System.getProperty("os.name", "generic").toLowerCase(Locale.ENGLISH);
+        if ((os.contains("mac")) || (os.contains("darwin"))) {
+            Application.getApplication().setDockIconImage(image);
+        }
+
         return frame;
 	}
 
