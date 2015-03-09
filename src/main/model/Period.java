@@ -111,4 +111,18 @@ public class Period {
     public int getDurationDays() {
         return Days.daysBetween(startDate, endDate).getDays();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null){
+            return false;
+        }
+
+        if (!(obj instanceof Period)){
+            return false;
+        }
+
+        Period another = (Period) obj;
+        return startDate.equals(another.getStartDate()) && endDate.equals(another.getEndDate());
+    }
 }

@@ -214,7 +214,12 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
             se.printStackTrace();
         }
 	}
-	
-	
 
+
+    public void addPeriod(Period period) throws SQLException {
+        //periods.add(period);
+        mc.addNewPeriod(period);
+        fireTableDataChanged();
+        //fireTableRowsInserted(0, 0);
+    }
 }

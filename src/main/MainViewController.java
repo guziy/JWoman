@@ -12,6 +12,7 @@ import javax.swing.table.TableModel;
 import main.model.ModelController;
 import main.model.Period;
 import main.model.PeriodsTableModel;
+import org.joda.time.LocalDate;
 
 public class MainViewController {
 
@@ -73,5 +74,9 @@ public class MainViewController {
 
     public JFrame getMainFrame(){
         return this.mainFrame;
+    }
+
+    public void createFirstPeriod(LocalDate startDate, LocalDate endDate) throws SQLException {
+        ptm.addPeriod(new Period(startDate, endDate));
     }
 }

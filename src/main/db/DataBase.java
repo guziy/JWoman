@@ -144,6 +144,10 @@ public class DataBase {
 		
 		System.out.println("Saving " + p);
 		pstmt.executeUpdate();
+        //Set the flag that the period is already saved into the db
+        System.out.println("Before: id = " + p.getDbRow());
+        p.setDbRow(pstmt.getGeneratedKeys().getRow());
+        System.out.println("After: id = " + p.getDbRow());
 	}
 
 	/**

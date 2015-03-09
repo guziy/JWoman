@@ -12,8 +12,10 @@ import main.Configuration;
 import main.db.DataBase;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
-public class ModelController {
+public class ModelController implements TableModelListener {
 	
 	private List<Period> currentPeriodsList;
 	private Date showPeriodsAfter, showPeriodsBefore;
@@ -52,6 +54,7 @@ public class ModelController {
 	
 	
 	public int getTotalNumberOfPeriods() throws SQLException{
+        save();
 		return db.getTotalNumberOfPeriods();
 	}
 	
@@ -85,12 +88,12 @@ public class ModelController {
 	public List<Period> getNLastPeriods(int nPeriods) throws SQLException{
 		
 		if (nPeriods <= currentPeriodsList.size()){
-			addNewPeriodIfNeeded(currentPeriodsList);
+			//addNewPeriodIfNeeded(currentPeriodsList);
 			return currentPeriodsList.subList(0, nPeriods);		
 		} 
 		
 		currentPeriodsList = db.getNLastPeriods(nPeriods);
-		addNewPeriodIfNeeded(currentPeriodsList);		
+		//addNewPeriodIfNeeded(currentPeriodsList);
 		return currentPeriodsList;
 	}
 	
@@ -109,9 +112,18 @@ public class ModelController {
 	public void close() throws SQLException{
 		db.close();
 	}
-	
-	
-	
-	
 
+
+    public void addNewPeriod(Period period) throws SQLException {
+        currentPeriodsList.add(period);
+        save();
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        PeriodsTableModel ptm = mvc.getPeriodsTableModel();
+        if (ptm.getRowCount() > currentPeriodsList.size()){
+            currentPeriodsList.add(0, ptm.getPeriodAt(0));
+        }
+    }
 }

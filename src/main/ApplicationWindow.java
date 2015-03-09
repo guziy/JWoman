@@ -13,6 +13,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import javax.swing.text.PlainDocument;
 
@@ -31,6 +33,7 @@ public class ApplicationWindow {
 	
 	//TODO: improve the caching later
 	private int totalNumOfPeriodsCached = -1;
+
 	
 	public ApplicationWindow() throws SQLException {
 		mvc = new MainViewController();
@@ -39,6 +42,9 @@ public class ApplicationWindow {
         //If there is no periods yet
         if (mvc.getTotalNumberOfPeriods() == 0) {
             FirstTimeDialog ftd = new FirstTimeDialog(frame);
+            if (!ftd.isCancelled()) {
+                mvc.createFirstPeriod(ftd.getStartDate(), ftd.getEndDate());
+            }
         }
     }
 	
@@ -88,9 +94,9 @@ public class ApplicationWindow {
 		mainPane.setLayout(gbl);
 		
 		
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		
+		//Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		//frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+		frame.setLocationRelativeTo(null);
 	
 		//2. Optional: What happens when the frame closes?
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -153,6 +159,15 @@ public class ApplicationWindow {
 		//Add the text field where the number of last periods to show is specified
 		final JTextField numPeriodsField = new JTextField();
 		numPeriodsField.setColumns(8);
+
+        ptm.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                numPeriodsField.setText(Integer.toString(ptm.getRowCount()));
+            }
+        });
+
+
 		
 		//((PlainDocument) numPeriodsField.getDocument()).setDocumentFilter(new PositiveIntDocumentFilter());
 		//numPeriodsField.getDocument().addDocumentListener((DocumentListener) ptm);
