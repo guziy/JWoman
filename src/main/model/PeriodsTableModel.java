@@ -68,7 +68,7 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
                     if (periods.size() >= 2) {
                         int newRecDays = Days.daysBetween(periods.get(rowIndex + 1).getStartDate(), newDate).getDays();
                         p.setRecurrenceDays(newRecDays);
-                        p.setEndDate(p.getStartDate().plusDays(p.getRecurrenceDays()));
+                        p.setEndDate(periods.get(rowIndex + 1).getEndDate().plusDays(p.getRecurrenceDays()));
                     }
                 } else {
                     Period pNext = periods.get(rowIndex - 1);
