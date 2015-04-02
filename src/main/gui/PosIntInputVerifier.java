@@ -1,8 +1,6 @@
 package main.gui;
 
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
+import javax.swing.*;
 
 public class PosIntInputVerifier  extends InputVerifier{
 

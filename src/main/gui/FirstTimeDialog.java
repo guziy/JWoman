@@ -1,17 +1,14 @@
 package main.gui;
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import org.joda.time.LocalDate;
 
 import javax.swing.*;
-import javax.swing.plaf.DimensionUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Date;
 
 /**
  * Created by san on 15-03-08.

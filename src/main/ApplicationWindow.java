@@ -1,32 +1,22 @@
 package main;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.util.Locale;
-
-import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.TableModel;
-import javax.swing.text.PlainDocument;
-
 import com.apple.eawt.Application;
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import main.gui.FirstTimeDialog;
 import main.gui.PeriodsTableEditor;
 import main.gui.PeriodsTableRenderer;
-import main.gui.PosIntInputVerifier;
-import main.model.ModelController;
 import main.model.PeriodsTableModel;
+
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Locale;
 
 public class ApplicationWindow {
 

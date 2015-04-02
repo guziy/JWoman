@@ -1,18 +1,13 @@
 package main;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.table.TableModel;
-
 import main.model.ModelController;
 import main.model.Period;
 import main.model.PeriodsTableModel;
 import org.joda.time.LocalDate;
+
+import javax.swing.*;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MainViewController {
 

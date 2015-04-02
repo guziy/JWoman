@@ -1,18 +1,14 @@
 package main.gui;
 
-import java.awt.*;
-
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-
 import main.model.Period;
 import main.model.PeriodsTableModel;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.ReadableInstant;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.*;
 
 public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 

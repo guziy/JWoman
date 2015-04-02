@@ -1,19 +1,16 @@
 package main.model;
 
-import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-
-import main.MainViewController;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-
 import main.Configuration;
+import main.MainViewController;
 import main.db.DataBase;
+import org.joda.time.LocalDate;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.List;
 
 public class ModelController implements TableModelListener {
 	

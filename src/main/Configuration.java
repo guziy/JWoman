@@ -1,8 +1,8 @@
 package main;
 
-import java.io.File;
-
 import main.db.DataBase;
+
+import java.io.File;
 
 public class Configuration {
 

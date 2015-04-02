@@ -1,12 +1,8 @@
 package main.gui;
 
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
-import javafx.scene.control.DatePicker;
-import main.model.PeriodsTableModel;
 import org.joda.time.LocalDate;
-import org.joda.time.ReadableDateTime;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;

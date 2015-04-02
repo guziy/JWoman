@@ -1,23 +1,16 @@
 package main.model;
 
+import main.Configuration;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
-import main.Configuration;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.LocalDate;
 
 public class PeriodsTableModel extends AbstractTableModel implements ActionListener{
 
