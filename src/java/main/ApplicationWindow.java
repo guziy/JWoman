@@ -1,6 +1,8 @@
 package main;
 
 import com.apple.eawt.Application;
+
+
 import com.jgoodies.looks.plastic.Plastic3DLookAndFeel;
 import main.gui.FirstTimeDialog;
 import main.gui.PeriodsTableEditor;
@@ -160,7 +162,6 @@ public class ApplicationWindow {
 		numPeriodsField.setColumns(8);
 
         ptm.addTableModelListener(new TableModelListener() {
-            @Override
             public void tableChanged(TableModelEvent e) {
                 numPeriodsField.setText(Integer.toString(ptm.getRowCount()));
             }
@@ -192,7 +193,6 @@ public class ApplicationWindow {
 		
 		final JButton filterButton = new JButton(new ImageIcon(this.getClass().getResource("/icons/filter-24px.png")));
         filterButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 e.setSource(numPeriodsField);
                 ptm.actionPerformed(e);
@@ -216,7 +216,6 @@ public class ApplicationWindow {
 		
 		//Show all checkbox actions
 		showAllCheckBox.addActionListener(new ActionListener(){
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				numPeriodsField.setEnabled(!showAllCheckBox.isSelected());
 				filterButton.setEnabled(!showAllCheckBox.isSelected());
@@ -253,7 +252,6 @@ public class ApplicationWindow {
 	public static void main(String[] args) {
 		// The entry point of the application
 		SwingUtilities.invokeLater(new Runnable(){
-			@Override
 			public void run() {
 				try {
 					ApplicationWindow aw = new ApplicationWindow();
