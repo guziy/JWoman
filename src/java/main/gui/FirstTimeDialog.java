@@ -28,7 +28,7 @@ public class FirstTimeDialog extends JDialog {
         super(mainWindow);
         setModalityType(ModalityType.APPLICATION_MODAL);
 
-        setSize(new Dimension(800, 300));
+        setSize(new Dimension(1000, 300));
 
         buildUI();
         pack();
@@ -124,14 +124,12 @@ public class FirstTimeDialog extends JDialog {
 
 
         okButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 onOk(e);
             }
         });
 
         cancelButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 onCancel(e);
             }

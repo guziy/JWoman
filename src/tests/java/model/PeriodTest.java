@@ -7,5 +7,4 @@ package model;
 public class PeriodTest {
 
 
-
 }

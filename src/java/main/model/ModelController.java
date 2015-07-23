@@ -32,7 +32,6 @@ public class ModelController implements TableModelListener {
         Configuration configuration = Configuration.getConfiguration();
         db = configuration.getDb();
 		currentPeriodsList = db.getNLastPeriods(30);
-
 	}
 	
 	public List<Period> getPeriodsForDates(Date start, Date end){	
@@ -74,8 +73,8 @@ public class ModelController implements TableModelListener {
 	
 	/**
 	 * Get nPeriods of the latest periods sorted to have the latest period first
-	 * @param nPeriods
-	 * @return
+	 * @param nPeriods - number of latest periods to fetch
+	 * @return list of Period objects representing the latest n periods
 	 * @throws SQLException
 	 */
 	public List<Period> getNLastPeriods(int nPeriods) throws SQLException{
@@ -112,7 +111,6 @@ public class ModelController implements TableModelListener {
         save();
     }
 
-    @Override
     public void tableChanged(TableModelEvent e) {
         PeriodsTableModel ptm = mvc.getPeriodsTableModel();
         if (ptm.getRowCount() > currentPeriodsList.size()){
