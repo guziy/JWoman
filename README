@@ -7,9 +7,16 @@ TODO
 	
 	* Insure that there is no duplicates in the db and in the table
 	* Add table editors, so start and end dates of a Period could be changed
-	* Add a menubar
+	* Add a menubar (add a button for "Fix data model inconsistencies")
 	* Add an icon in tray which will be customized based on the current date if it is within the period or not
 
+
+	Newer
+
+	* Check if an instant of the app is already running (Can I use sqlite lock for this ?...)
+    * Check why it randomly creates new periods
+    * Maybe create a dialog for entering dates into the table ...
+    * Add a possibility to remove the
 	
 
 Dependencies

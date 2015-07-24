@@ -28,11 +28,23 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 		
 		if (value == null) return c;
 
+
         JLabel jl = (JLabel) c;
+
 		if (value.getClass() == LocalDate.class){
 			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
 			jl.setText(fmt.print( (LocalDate) value));
 		}
+
+
+        if (!isSelected) {
+            if (row % 2 == 1) {
+                c.setBackground(Color.decode("0xdddddd"));
+            } else {
+                c.setBackground(Color.white);
+            }
+        }
+
 
         if (column == PeriodsTableModel.STATUS_COLUMN_INDEX){
             Period p = ptm.getPeriodAt(row);
@@ -47,6 +59,8 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
             jl.setForeground(Color.BLACK);
         }
 
+        jl.setHorizontalAlignment(JLabel.CENTER);
+        jl.setFont(jl.getFont().deriveFont(Font.PLAIN, 14));
 		
 		return c;
 	}
