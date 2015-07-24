@@ -30,7 +30,7 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 
         JLabel jl = (JLabel) c;
 		if (value.getClass() == LocalDate.class){
-			DateTimeFormatter fmt = DateTimeFormat.forPattern("E, d-MMMM-yyyy");
+			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
 			jl.setText(fmt.print( (LocalDate) value));
 		}
 

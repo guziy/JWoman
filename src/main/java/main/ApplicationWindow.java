@@ -120,7 +120,7 @@ public class ApplicationWindow {
 		//add the table containing the periods
 		final PeriodsTableModel ptm = mvc.getPeriodsTableModel();
 		JTable table = new JTable(ptm);
-        table.setRowHeight(20);
+        table.setRowHeight(25);
 
 		table.setDefaultRenderer(Object.class, new PeriodsTableRenderer(ptm));
 		//table.setPreferredSize(new Dimension(600, 400));

@@ -50,8 +50,8 @@ public class ModelController implements TableModelListener {
 	}
 	
 	
-	private void addNewPeriodIfNeeded(List<Period> periods){
-		// Add a new period if necessary
+	private void createNewPeriodsIfNeeded(List<Period> periods){
+		// Create a new period if necessary
 		LocalDate currentDate = new LocalDate();
 		Period previous, next;
         if (periods.size() != 0) {
@@ -73,12 +73,12 @@ public class ModelController implements TableModelListener {
 	public List<Period> getNLastPeriods(int nPeriods) throws SQLException{
 		
 		if (nPeriods <= currentPeriodsList.size()){
-			// addNewPeriodIfNeeded(currentPeriodsList);
+			// createNewPeriodsIfNeeded(currentPeriodsList);
 			return currentPeriodsList.subList(0, nPeriods);		
 		} 
 		
 		currentPeriodsList = db.getNLastPeriods(nPeriods);
-		addNewPeriodIfNeeded(currentPeriodsList);
+		createNewPeriodsIfNeeded(currentPeriodsList);
 		return currentPeriodsList;
 	}
 	
@@ -105,22 +105,31 @@ public class ModelController implements TableModelListener {
      *               Note: if a period with the same start date already exists in the
      *               system, then nothing will be changed or added to the model
      */
-    public void addNewPeriod(Period period) {
+    public void addNewPeriod(Period period) throws SQLException {
 
         // check at least if the period we are trying to add
         // is not already in the cache
 
         boolean toAdd = true;
 
+        // the start date of the added period
+        LocalDate startDate = period.getStartDate();
+
         for (Period p: currentPeriodsList) {
-            if (p.getStartDate().equals(period.getStartDate())) {
+            if (p.getStartDate().equals(startDate)) {
                 toAdd = false;
                 break;
             }
         }
 
+
         if (toAdd) {
-            currentPeriodsList.add(period);
+            // More thoroughly now check if there is a period with the same date in the database
+            List<Period> pList = db.getPeriodsForStartDate(startDate);
+
+            if (pList.size() == 0) {
+                currentPeriodsList.add(period);
+            }
         }
 
         // Probably should not hit the db on each new period
@@ -166,6 +175,6 @@ public class ModelController implements TableModelListener {
     }
 
     public List<Period> getPeriodsForStartDate(LocalDate startDate) throws SQLException {
-        return db.getPeriodsForDate(startDate);
+        return db.getPeriodsForStartDate(startDate);
     }
 }

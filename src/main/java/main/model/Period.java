@@ -20,7 +20,13 @@ public class Period {
 		this.dbRow = dbRow;
 	}
 	
-	
+
+	public Period() {
+        this.setStartDate(new LocalDate());
+        this.setEndDate(startDate.plusDays(defaultPeriodDurationDays));
+    }
+
+
 	public Period(LocalDate startDate){
 		this.setStartDate(startDate);
 		this.setEndDate(startDate.plusDays(defaultPeriodDurationDays));
@@ -46,6 +52,14 @@ public class Period {
 			this.setRecurrenceDays(recurrenceDays);
 		}		
 	}
+
+
+    public Period(Period p) {
+        this.setStartDate(p.startDate);
+        this.setEndDate(p.getEndDate());
+        this.setRecurrenceDays(p.getRecurrenceDays());
+    }
+
 	
 	public String toString() {
 		return "Period: "+ startDate + ", " + endDate;

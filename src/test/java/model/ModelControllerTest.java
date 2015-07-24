@@ -104,7 +104,20 @@ public class ModelControllerTest {
 
 
     @Test
-    public void shouldThrowAnExceptionWhenTryingToSaveSamePeriods() {
+    public void duplicatePeriodsShouldNotBeAdded() throws SQLException {
+        ModelController mc = createModelController();
+
+        Period p = mc.getNLastPeriods(1).get(0);
+
+        int nPeriods = mc.getTotalNumberOfPeriods();
+
+        // the clone, which is not connected to the database
+        p = new Period(p);
+        mc.addNewPeriod(p);
+
+        mc.save();
+
+        assertEquals(nPeriods, mc.getTotalNumberOfPeriods());
 
     }
 

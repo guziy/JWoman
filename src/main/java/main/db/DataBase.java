@@ -141,6 +141,7 @@ public class DataBase {
         System.out.println("Before: id = " + p.getDbRow());
         p.setDbRow(pstmt.getGeneratedKeys().getRow());
         System.out.println("After: id = " + p.getDbRow());
+        pstmt.close();
 	}
 
 	/**
@@ -187,7 +188,7 @@ public class DataBase {
         pstmt.close();
 	}
 
-    public List<Period> getPeriodsForDate(LocalDate localDate) throws SQLException {
+    public List<Period> getPeriodsForStartDate(LocalDate localDate) throws SQLException {
 
         PreparedStatement pstmt = connection.prepareStatement(
                 "select * from " + PEROIDS_TABLE_NAME + " where start_date=?;");

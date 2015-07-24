@@ -32,7 +32,7 @@ public class Configuration {
 		this.userDir = System.getProperty("user.home");
 		
 		//create the application folder if required
-		String appFolderPath = this.userDir + fs + ".jwooman";
+		String appFolderPath = this.userDir + fs + ".jwoman";
 		File appFolder = new File(appFolderPath);
 		if (!appFolder.exists()){
 			appFolder.mkdir();
