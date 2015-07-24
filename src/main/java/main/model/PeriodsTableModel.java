@@ -116,17 +116,14 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
 		this.periods = mc.getNLastPeriods(nPeriodsToShow);
 	}
 	
-	@Override
 	public int getRowCount() {
 		return periods.size();
 	}
 
-	@Override
 	public int getColumnCount() {
 		return columnNames.length;
 	}
 
-	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
 		currentDate = new LocalDate();
@@ -196,7 +193,6 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
 	}
 
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 
         try {
@@ -212,6 +208,8 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
     public void addPeriod(Period period) throws SQLException {
         //periods.add(period);
         mc.addNewPeriod(period);
+        mc.createNewPeriodsIfNeeded();
+
         fireTableDataChanged();
         //fireTableRowsInserted(0, 0);
     }

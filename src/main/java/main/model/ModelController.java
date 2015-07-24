@@ -50,7 +50,7 @@ public class ModelController implements TableModelListener {
 	}
 	
 	
-	private void createNewPeriodsIfNeeded(List<Period> periods){
+	public void createNewPeriodsIfNeeded(List<Period> periods){
 		// Create a new period if necessary
 		LocalDate currentDate = new LocalDate();
 		Period previous, next;
@@ -62,6 +62,10 @@ public class ModelController implements TableModelListener {
                 periods.add(0, next);
 			}
 		}
+    }
+
+    public void createNewPeriodsIfNeeded() {
+        createNewPeriodsIfNeeded(currentPeriodsList);
     }
 	
 	/**

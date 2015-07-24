@@ -1,6 +1,7 @@
 package main.gui;
 
 import com.toedter.calendar.JDateChooser;
+import org.joda.time.Days;
 import org.joda.time.LocalDate;
 
 import javax.swing.*;
@@ -28,10 +29,10 @@ public class FirstTimeDialog extends JDialog {
         super(mainWindow);
         setModalityType(ModalityType.APPLICATION_MODAL);
 
-        setSize(new Dimension(1000, 300));
+        setSize(new Dimension(800, 300));
 
         buildUI();
-        pack();
+
         startDate = new LocalDate();
         endDate = new LocalDate();
         setLocationRelativeTo(mainWindow);
@@ -60,11 +61,11 @@ public class FirstTimeDialog extends JDialog {
 
         mainPanel.setLayout(gbl);
 
-        JLabel startDateLabel = new JLabel("Start date");
+        JLabel startDateLabel = new JLabel("Start date:");
         startDateCal = new JDateChooser();
         startDateCal.setToolTipText("Select start date of the period");
 
-        JLabel endDateLabel = new JLabel("End date");
+        JLabel endDateLabel = new JLabel("End date:");
         endDateCal = new JDateChooser();
         endDateCal.setToolTipText("Select end date of the period");
 
@@ -83,8 +84,8 @@ public class FirstTimeDialog extends JDialog {
         gbc.insets = new Insets(10,10,10,10);
         mainPanel.add(startDateLabel, gbc);
 
-        gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.insets = new Insets(10,10,10,10);
         mainPanel.add(endDateLabel, gbc);
@@ -92,16 +93,18 @@ public class FirstTimeDialog extends JDialog {
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.gridwidth = 1;
+        gbc.gridwidth = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(0, 0, 0, 0);
         mainPanel.add(startDateCal, gbc);
 
-        gbc.gridx = 3;
-        gbc.gridy = 0;
+        gbc.gridx = 1;
+        gbc.gridy = 1;
         mainPanel.add(endDateCal, gbc);
 
 
-        gbc.gridx = 2;
-        gbc.gridy = 1;
+        gbc.gridx = 3;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.EAST;
         mainPanel.add(buttonPanel, gbc);
@@ -147,7 +150,18 @@ public class FirstTimeDialog extends JDialog {
     private void onOk(ActionEvent e) {
         startDate = new LocalDate(startDateCal.getDate());
         endDate = new LocalDate(endDateCal.getDate());
+
+        int durationDays = Days.daysBetween(startDate, endDate).getDays();
+
+        String message = "The dates you\'ve entered do not seem right: the duration is either too long or negative.\n" +
+                "Please correct and resubmit !";
+        if (durationDays > 20 || durationDays <= 0) {
+            JOptionPane.showMessageDialog(this, message);
+            return;
+        }
+
         cancelled = false;
+
         dispose();
     }
 
