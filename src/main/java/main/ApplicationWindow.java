@@ -49,7 +49,7 @@ public class ApplicationWindow {
 	private JFrame getMainFrame(){
 		JFrame frame = new JFrame("JWoman");
 
-		frame.setSize(new Dimension(800, 600));
+		frame.setSize(new Dimension(1000, 600));
         Toolkit kit = Toolkit.getDefaultToolkit();
 
         Image image = kit.getImage(this.getClass().getResource("/icons/heart-64px.png"));
@@ -193,7 +193,8 @@ public class ApplicationWindow {
 		filterPanel.add(numPeriodsLabel, gbc);
 
         Icon icon = new ImageIcon(
-                this.getClass().getResource("/icons/filter-24px.png").getPath());
+                Toolkit.getDefaultToolkit().getImage(
+                        this.getClass().getResource("/icons/filter-24px.png")));
 
 
         final JButton filterButton = new JButton(icon);
@@ -221,32 +222,32 @@ public class ApplicationWindow {
 		filterPanel.add(showAllCheckBox, gbc);
 		
 		//Show all checkbox actions
-		showAllCheckBox.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				numPeriodsField.setEnabled(!showAllCheckBox.isSelected());
-				filterButton.setEnabled(!showAllCheckBox.isSelected());
-				
-				if (showAllCheckBox.isSelected()){
-					try {
+		showAllCheckBox.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                numPeriodsField.setEnabled(!showAllCheckBox.isSelected());
+                filterButton.setEnabled(!showAllCheckBox.isSelected());
 
-						if (totalNumOfPeriodsCached < 0) { //Go to the database only once
-							totalNumOfPeriodsCached = mvc.getTotalNumberOfPeriods();
-						}
-						ptm.onChangeOfNumOfPeriodsToShow(totalNumOfPeriodsCached);
-						numPeriodsField.setText(Integer.toString(totalNumOfPeriodsCached));
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}				
-				}
-			}
-			
-		});
+                if (showAllCheckBox.isSelected()) {
+                    try {
+
+                        if (totalNumOfPeriodsCached < 0) { //Go to the database only once
+                            totalNumOfPeriodsCached = mvc.getTotalNumberOfPeriods();
+                        }
+                        ptm.onChangeOfNumOfPeriodsToShow(totalNumOfPeriodsCached);
+                        numPeriodsField.setText(Integer.toString(totalNumOfPeriodsCached));
+                    } catch (SQLException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            }
+
+        });
 		
 		
 		
 		//4. Size the frame.
-		// frame.pack();
+		frame.pack();
 	
 		//5. Show it.
 		frame.setVisible(true);
