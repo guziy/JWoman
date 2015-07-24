@@ -51,7 +51,8 @@ public class ApplicationWindow {
 
 		frame.setSize(new Dimension(800, 600));
         Toolkit kit = Toolkit.getDefaultToolkit();
-        Image image = kit.getImage(ClassLoader.getSystemResource("icons/heart-64px.png"));
+
+        Image image = kit.getImage(this.getClass().getResource("/icons/heart-64px.png"));
         frame.setIconImage(image);
 
 
@@ -70,17 +71,18 @@ public class ApplicationWindow {
             UIManager.setLookAndFeel(
                     new Plastic3DLookAndFeel());
 
+			/**
             for (UIManager.LookAndFeelInfo s: UIManager.getInstalledLookAndFeels()){
                 System.out.println(s.getClassName());
             }
-
+            */
         }
         catch (UnsupportedLookAndFeelException e) {
             // handle exception
         }
     }
 	
-	private void buildUI(){
+	private void buildUI() {
 
         setLookAndFeel();
 
@@ -189,9 +191,13 @@ public class ApplicationWindow {
 		gbc.gridx = 0;
 		gbc.insets = new Insets(10,10,0,0);
 		filterPanel.add(numPeriodsLabel, gbc);
-		
-		
-		final JButton filterButton = new JButton(new ImageIcon(this.getClass().getResource("/icons/filter-24px.png")));
+
+        Icon icon = new ImageIcon(
+                this.getClass().getResource("/icons/filter-24px.png").getPath());
+
+
+        final JButton filterButton = new JButton(icon);
+
         filterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 e.setSource(numPeriodsField);

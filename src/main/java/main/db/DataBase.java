@@ -127,8 +127,8 @@ public class DataBase {
 	 */
 	public void saveNewPeriod(Period p) throws SQLException{
 		PreparedStatement pstmt = connection.prepareStatement(
-				"insert into "+ PEROIDS_TABLE_NAME +"(start_date, end_date, " + RECCURENCE_DAYS_COLNAME + ")" +
-				"values(?,?,?)");
+                "insert into " + PEROIDS_TABLE_NAME + "(start_date, end_date, " + RECCURENCE_DAYS_COLNAME + ")" +
+                        "values(?,?,?)");
 		
 		pstmt.setDate(1, new java.sql.Date(p.getStartDate().toDate().getTime()));
 		pstmt.setDate(2, new java.sql.Date(p.getEndDate().toDate().getTime()));
@@ -145,21 +145,14 @@ public class DataBase {
 
 	/**
 	 * If new periods were added update them
-	 * @param currentPeriodsList
+	 * @param currentPeriodsList - current list of periods in memory, some might be new and some might already exist
 	 * @throws SQLException
 	 */
 	public void updatePeriodsInDb(List<Period> currentPeriodsList) throws SQLException {
 		if (currentPeriodsList == null) return;
-		
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append("update ");
-		stringBuilder.append(PEROIDS_TABLE_NAME);
-		stringBuilder.append(" set start_date=?, end_date=?, ");
-		stringBuilder.append(RECCURENCE_DAYS_COLNAME + "=?");
-		stringBuilder.append(" where rowid=?;");
-		
+
 		PreparedStatement pstmt = connection.prepareStatement(
-				stringBuilder.toString());
+				"update " + PEROIDS_TABLE_NAME + " set start_date=?, end_date=?, " + RECCURENCE_DAYS_COLNAME + "=?" + " where rowid=?;");
 		
 		for (Period p: currentPeriodsList){
 			if (p.getDbRow() == -1){
@@ -174,7 +167,52 @@ public class DataBase {
 		}
 		pstmt.close();
 	}
-	
-	
 
+    /**
+     *
+     * @param period - remove the period object from the database
+     * @throws SQLException
+     */
+	public void removePeriod(Period period) throws SQLException {
+		// The period is not in the database (only in memory)
+        if (period.getDbRow() == -1) {
+            return;
+        }
+
+        PreparedStatement pstmt = connection.prepareStatement(
+                "delete from " + PEROIDS_TABLE_NAME + " where rowid=?;");
+
+        pstmt.setInt(1, period.getDbRow());
+        pstmt.execute();
+        pstmt.close();
+	}
+
+    public List<Period> getPeriodsForDate(LocalDate localDate) throws SQLException {
+
+        PreparedStatement pstmt = connection.prepareStatement(
+                "select * from " + PEROIDS_TABLE_NAME + " where start_date=?;");
+
+        pstmt.setDate(1, new java.sql.Date(localDate.toDate().getTime()));
+
+        ResultSet rs = pstmt.executeQuery();
+
+        List<Period> results = new ArrayList<Period>();
+        Period p;
+        int dbRow;
+        LocalDate start, end;
+        while (rs.next()){
+            dbRow = rs.getRow();
+            start = new LocalDate(rs.getDate("start_date").getTime());
+            end = new LocalDate(rs.getDate("end_date").getTime());
+
+            p = new Period(start, end, rs.getInt(RECCURENCE_DAYS_COLNAME));
+            //System.out.println("Got " + p + " from a DB.");
+            p.setDbRow(dbRow);
+            results.add(p);
+        }
+        rs.close();
+        pstmt.close();
+        return results;
+
+    }
 }

@@ -19,3 +19,13 @@ Dependencies
     * jcalendar: for editing dates in the table
     * jgoodies-looks: for the look and feel
     * sqlite-jdbc: for persistence
+
+
+Building an executable jar
+------------
+
+In the root folder of the project in the shell, execute the following.
+
+```
+ mvn clean compile assembly:single
+```
