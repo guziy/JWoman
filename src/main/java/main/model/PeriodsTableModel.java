@@ -20,8 +20,6 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
 	};
 
 
-    private LocalDate currentDate;
-
     public static final int STATUS_COLUMN_INDEX = 2;
 
     @Override
@@ -35,61 +33,53 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
 
     @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-        boolean notValid = false;
         Period p = periods.get(rowIndex);
         LocalDate newDate = null;
         if (columnIndex == 0 || columnIndex == 1){
             newDate = (LocalDate) aValue;
             if (columnIndex == 0){
                 if (p.getStartDate().equals(newDate)) return;
-                notValid = p.getEndDate().isBefore(newDate);
             } else {
                 if (p.getEndDate().equals(newDate)) return;
-                notValid = p.getStartDate().isAfter(newDate);
             }
         }
-        if (notValid){
-            JOptionPane.showMessageDialog(mc.getMainWindow(), "The date is not valid. " +
-                    "Please make sure that the start date of the period is before the end date.");
-        } else {
 
-            if (columnIndex == 0){
+        if (columnIndex == 0){
 
-                p.setStartDate(newDate);
+            p.setStartDate(newDate);
 
-                if (rowIndex == 0) {
-                    if (periods.size() >= 2) {
-                        int newRecDays = Days.daysBetween(periods.get(rowIndex + 1).getStartDate(), newDate).getDays();
-                        p.setRecurrenceDays(newRecDays);
-                        p.setEndDate(periods.get(rowIndex + 1).getEndDate().plusDays(p.getRecurrenceDays()));
-                    }
-                } else {
-                    Period pNext = periods.get(rowIndex - 1);
-
-                    if (pNext.isFuture()){
-                        pNext.setStartDate(p.getStartDate().plusDays(p.getRecurrenceDays()));
-                        pNext.setEndDate(p.getEndDate().plusDays(p.getRecurrenceDays()));
-                        pNext.setRecurrenceDays(p.getRecurrenceDays());
-                    }
-                    fireTableRowsUpdated(rowIndex - 1, rowIndex);
+            if (rowIndex == 0) {
+                if (periods.size() >= 2) {
+                    int newRecDays = Days.daysBetween(periods.get(rowIndex + 1).getStartDate(), newDate).getDays();
+                    p.setRecurrenceDays(newRecDays);
+                    p.setEndDate(periods.get(rowIndex + 1).getEndDate().plusDays(p.getRecurrenceDays()));
                 }
-            } else if(columnIndex == 1){
+            } else {
+                Period pNext = periods.get(rowIndex - 1);
 
-                p.setEndDate(newDate);
-                //Change the duration for all future periods
-                int durationDays = p.getDurationDays();
-                Period thePeriod;
-                for (int index = rowIndex - 1; rowIndex > 0; rowIndex--){
-                    thePeriod = periods.get(index);
-                    if (thePeriod.isFuture()) {
-                        thePeriod.setEndDate(thePeriod.getStartDate().plusDays(durationDays));
-                    }
+                if (pNext.isFuture()){
+                    pNext.setStartDate(p.getStartDate().plusDays(p.getRecurrenceDays()));
+                    pNext.setEndDate(p.getEndDate().plusDays(p.getRecurrenceDays()));
+                    pNext.setRecurrenceDays(p.getRecurrenceDays());
                 }
-                fireTableRowsUpdated(0, rowIndex);
+                fireTableRowsUpdated(rowIndex - 1, rowIndex);
             }
+        } else if(columnIndex == 1){
 
-            fireTableCellUpdated(rowIndex, columnIndex);
+            p.setEndDate(newDate);
+            //Change the duration for all future periods
+            int durationDays = p.getDurationDays();
+            Period thePeriod;
+            for (int index = rowIndex - 1; rowIndex > 0; rowIndex--){
+                thePeriod = periods.get(index);
+                if (thePeriod.isFuture()) {
+                    thePeriod.setEndDate(thePeriod.getStartDate().plusDays(durationDays));
+                }
+            }
+            fireTableRowsUpdated(0, rowIndex);
         }
+
+        fireTableCellUpdated(rowIndex, columnIndex);
 
     }
 
@@ -126,7 +116,7 @@ public class PeriodsTableModel extends AbstractTableModel implements ActionListe
 
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		// TODO Auto-generated method stub
-		currentDate = new LocalDate();
+        LocalDate currentDate = new LocalDate();
 		
 		Period p = periods.get(rowIndex);
 		

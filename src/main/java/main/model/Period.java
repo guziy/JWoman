@@ -76,7 +76,7 @@ public class Period {
 	}
 
 
-	public void setRecurrenceDays(int recurrenceDays) {
+	void setRecurrenceDays(int recurrenceDays) {
 		this.recurrenceDays = recurrenceDays;
 	}
 
@@ -86,7 +86,7 @@ public class Period {
 	}
 
 
-	public void setStartDate(LocalDate startDate) {
+	void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
@@ -96,7 +96,7 @@ public class Period {
 	}
 
 
-	public void setEndDate(LocalDate endDate) {
+	void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -122,7 +122,7 @@ public class Period {
     }
 
 
-    public int getDurationDays() {
+    int getDurationDays() {
         return Days.daysBetween(startDate, endDate).getDays();
     }
 

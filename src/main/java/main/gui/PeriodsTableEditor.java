@@ -8,13 +8,16 @@ import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.util.Date;
+import java.util.Locale;
 
 public class PeriodsTableEditor extends AbstractCellEditor implements TableCellEditor{
 
-    JDateChooser editor;
+    private JDateChooser editor;
 
     public PeriodsTableEditor(){
         editor = new JDateChooser();
+        editor.setLocale(Locale.ENGLISH);
+        editor.setDateFormatString("dd-MMM-yyyy");
     }
 
 

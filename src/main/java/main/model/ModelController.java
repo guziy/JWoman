@@ -20,7 +20,7 @@ public class ModelController implements TableModelListener {
     private MainViewController mvc;
 
 
-    public JFrame getMainWindow(){
+    JFrame getMainWindow(){
        return mvc.getMainFrame();
     }
 
@@ -64,7 +64,7 @@ public class ModelController implements TableModelListener {
 		}
     }
 
-    public void createNewPeriodsIfNeeded() {
+    void createNewPeriodsIfNeeded() {
         createNewPeriodsIfNeeded(currentPeriodsList);
     }
 	

@@ -14,9 +14,11 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
 
 
     private PeriodsTableModel ptm;
+    private final DateTimeFormatter dateTimeFormatter;
 
     public PeriodsTableRenderer(PeriodsTableModel ptm){
         this.ptm = ptm;
+        dateTimeFormatter = DateTimeFormat.forPattern("dd-MMM-yyyy");
     }
 
 	@Override
@@ -32,8 +34,7 @@ public class PeriodsTableRenderer extends DefaultTableCellRenderer{
         JLabel jl = (JLabel) c;
 
 		if (value.getClass() == LocalDate.class){
-			DateTimeFormatter fmt = DateTimeFormat.forPattern("dd-MMM-yyyy");
-			jl.setText(fmt.print( (LocalDate) value));
+            jl.setText(dateTimeFormatter.print( (LocalDate) value));
 		}
 
 
